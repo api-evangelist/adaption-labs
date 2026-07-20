@@ -1,0 +1,34 @@
+generated: '2026-07-17'
+method: searched
+source: https://docs.adaptionlabs.ai/introduction/create-api-keys/index.md
+docs: https://docs.adaptionlabs.ai/introduction/create-api-keys/index.md
+api: Adaptive Data API
+base_url: https://api.prod.adaptionlabs.ai
+summary: >-
+  Adaption authenticates programmatic access with a single API key presented as
+  an HTTP Bearer token. Keys are created in the web app under Settings > API keys,
+  shown once, and stored as a secret. The Python SDK reads the key from the
+  ADAPTION_API_KEY environment variable or an explicit api_key argument.
+schemes:
+- id: bearer
+  type: http
+  scheme: bearer
+  in: header
+  header: Authorization
+  format: 'Bearer [example key]'
+  key_prefix: pt_live_
+  description: >-
+    Static API key issued in the Adaption web app (Settings > API keys), sent as
+    a Bearer token on every request.
+env:
+- name: ADAPTION_API_KEY
+  purpose: API key read by the Python SDK when no api_key argument is passed
+- name: ADAPTION_BASE_URL
+  purpose: Overrides the default API base URL (https://api.prod.adaptionlabs.ai)
+key_management:
+  create_url: https://adaptionlabs.ai/app/settings?tab=api_keys
+  rotation: Keys are shown once at creation and cannot be re-viewed; rotate by creating a new key.
+  third_party_credentials:
+  - provider: Kaggle
+    note: Kaggle API credentials must be registered under Settings > API keys before importing Kaggle datasets.
+oauth2: false
