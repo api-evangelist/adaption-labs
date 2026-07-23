@@ -1,0 +1,24 @@
+generated: '2026-07-17'
+method: searched
+source: https://docs.adaptionlabs.ai/api
+versioning:
+  scheme: uri-path
+  current: v1
+  path_prefix: /api/v1
+  docs: https://docs.adaptionlabs.ai/api
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No deprecation or Sunset-header policy is published as of this pass.
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+notes: >-
+  Early-stage API (SDK v0.x, seed-stage company). One documented endpoint that
+  currently returns 501 (publishDataset) marks a not-yet-implemented capability
+  rather than a deprecation. No public status page or SLA was found (a status
+  probe of status.adaptionlabs.ai did not resolve).
+deprecated_operations: []
+not_implemented_operations:
+  - openapi/adaption-labs-datasets-openapi.yml#publishDataset

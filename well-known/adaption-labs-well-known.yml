@@ -1,0 +1,24 @@
+generated: '2026-07-17'
+method: probed
+source: live probes of adaptionlabs.ai hosts
+note: >-
+  No /.well-known discovery documents were served. The www host 301-redirects
+  well-known paths to the apex, which returns 404; the docs and API hosts return
+  404. No security.txt, OIDC, OAuth AS metadata, api-catalog, or ai-plugin.json
+  published. Absence recorded as valid data — no WellKnown/SecurityTxt pointer emitted.
+hosts:
+  - host: https://www.adaptionlabs.ai
+    documents:
+      - { path: /.well-known/security.txt, status: 301 }
+      - { path: /.well-known/openid-configuration, status: 301 }
+      - { path: /.well-known/oauth-authorization-server, status: 301 }
+      - { path: /.well-known/api-catalog, status: 301 }
+      - { path: /.well-known/ai-plugin.json, status: 301 }
+  - host: https://adaptionlabs.ai
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+  - host: https://docs.adaptionlabs.ai
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }

@@ -1,0 +1,26 @@
+generated: '2026-07-17'
+method: searched
+source: https://pypi.org/pypi/adaption/json
+scope: Official Python SDK (adaption) release history — no separate dated API changelog is published as of this pass.
+scheme: semver
+current_version: 0.4.0
+subject: adaption (Python SDK)
+entries:
+- version: 0.4.0
+  date: '2026-06-10'
+  requires_python: '>=3.9'
+- version: 0.3.1
+  date: '2026-04-16'
+  requires_python: '>=3.9'
+- version: 0.2.1
+  date: '2026-04-09'
+  requires_python: '>=3.9'
+- version: 0.2.0
+  date: '2026-04-09'
+  requires_python: '>=3.9'
+- version: 0.1.0
+  date: '2026-04-08'
+  requires_python: '>=3.9'
+note: >-
+  Product/announcement history is published on the Adaption blog
+  (https://adaptionlabs.ai/blog); the API itself is versioned at /api/v1.

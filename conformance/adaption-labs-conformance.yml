@@ -1,0 +1,36 @@
+generated: '2026-07-17'
+method: searched
+source: https://adaptionlabs.ai/enterprise
+standards:
+  - id: soc2
+    conforms: true
+    evidence: >-
+      Enterprise page states "Our cloud platform is SOC 2 and certified
+      compliant, ensuring our infrastructure and operations meet rigorous
+      industry standards for enterprise deployment."
+    source: https://adaptionlabs.ai/enterprise
+  - id: oauth2
+    conforms: false
+    evidence: API uses a static Bearer API key, not OAuth2.
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors use a provider envelope (error_data { code, level, message }) with
+      stable codes (e.g. E0100), not application/problem+json.
+  - id: cursor-pagination
+    conforms: true
+    evidence: listDatasets uses cursor/limit with a next_cursor response field.
+  - id: bearer-token-auth
+    conforms: true
+    evidence: openapi securityScheme type http scheme bearer.
+compliance_program:
+  soc2: true
+  iso27001: false
+  hipaa: false
+  fedramp: false
+  note: >-
+    SOC 2 is the only certification the provider publicly claims (enterprise
+    page). No trust center or downloadable report portal was found
+    (trust./security. subdomains did not resolve).

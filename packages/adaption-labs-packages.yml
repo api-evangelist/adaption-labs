@@ -1,0 +1,19 @@
+generated: '2026-07-17'
+method: searched
+source: https://pypi.org/pypi/adaption/json
+packages:
+- name: adaption
+  registry: PyPI
+  language: Python
+  official: true
+  url: https://pypi.org/project/adaption/
+  install: pip install adaption
+  version: 0.4.0
+  license: Apache-2.0
+  requires: '>=3.9'
+  generator: stainless
+  repository: https://github.com/stainless-sdks/adaption-python
+  description: >-
+    The official Python library for the Adaption (Adaptive Data) API — ingest,
+    adapt, evaluate, and export training data. Exposes a sync (Adaption) and an
+    async (AsyncAdaption) client.

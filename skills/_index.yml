@@ -1,0 +1,24 @@
+generated: '2026-07-17'
+method: generated
+source: openapi/adaption-labs-datasets-openapi.yml
+api: Adaptive Data API
+skills:
+  - name: adaptive-data-lifecycle
+    file: adaption-labs-adaptive-data-lifecycle.md
+    description: Ingest, adapt, evaluate, and export a dataset with the official Adaption Python SDK.
+    operations:
+      - datasets.upload_file
+      - datasets.run
+      - datasets.wait_for_completion
+      - datasets.get_evaluation
+      - datasets.download
+  - name: Adapt a dataset with Adaptive Data
+    file: adaption-labs-adapt-a-dataset.md
+    description: Presigned-upload ingest, run an adaptation with brand/quality controls, poll, download (REST).
+    api: openapi/adaption-labs-datasets-openapi.yml
+    operations: [createDataset, completeUploadById, runDataset, getDatasetStatus, downloadDataset]
+  - name: Estimate run cost and evaluate dataset quality
+    file: adaption-labs-estimate-and-evaluate.md
+    description: Quote run cost with estimate=true, then read before/after quality metrics (REST).
+    api: openapi/adaption-labs-datasets-openapi.yml
+    operations: [runDataset, getDatasetEvaluation, getDataset]

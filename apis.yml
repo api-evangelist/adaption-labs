@@ -1,22 +1,101 @@
 aid: adaption-labs
 name: Adaption Labs
-description: 'Adaption Labs is a company surfaced as a portfolio company of threshold-ventures and added
-  to the API Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: >-
+  Adaption Labs is a San Francisco AI research company, founded in 2025 by Sara
+  Hooker and Sudip Roy (both formerly of Cohere), building adaptive AI systems
+  that continuously learn from real-world interaction instead of scaling through
+  ever-larger pretraining runs. Its Adaptive Data platform and the REST Adaption
+  API let teams ingest, adapt, evaluate, and export model-ready training data,
+  while AutoScientist automates the research loop behind model training and
+  alignment. The Adaption API is available through a web app and an official
+  Python SDK (pip install adaption). Backed by a $50M seed round led by Emergence
+  Capital, with Threshold Ventures, Mozilla Ventures, Fifty Years, and others.
 url: https://raw.githubusercontent.com/api-evangelist/adaption-labs/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://adaptionlabs.ai/opengraph-image.jpg
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - threshold-ventures
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: has-public-api-and-sdk
+x-enriched: '2026-07-17'
 specificationVersion: '0.20'
 created: '2026-07-17'
 modified: '2026-07-17'
 tags:
 - Company
-- Ai
-apis: []
+- AI
+- Machine Learning
+- Training Data
+- Datasets
+- LLM
+- Adaptive Data
+- SDK
+apis:
+- aid: adaption-labs:adaption-labs-datasets-api
+  name: Adaption Labs Datasets API
+  description: Create, ingest, adapt, evaluate, and export datasets.
+  humanURL: https://docs.adaptionlabs.ai/
+  baseURL: https://api.prod.adaptionlabs.ai
+  tags:
+  - Datasets
+  properties:
+  - type: OpenAPI
+    url: openapi/adaption-labs-datasets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.adaptionlabs.ai/
+  - type: APIReference
+    url: https://docs.adaptionlabs.ai/api
+  - type: GettingStarted
+    url: https://docs.adaptionlabs.ai/introduction/getting-started/index.md
+  - type: Authentication
+    url: authentication/adaption-labs-authentication.yml
+  - type: SDKs
+    url: packages/adaption-labs-packages.yml
+  - type: Conventions
+    url: conventions/adaption-labs-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adaption-labs-problem-types.yml
+  - type: DataModel
+    url: data-model/adaption-labs-data-model.yml
+- aid: adaption-labs:adaption-labs-upload-api
+  name: Adaption Labs Upload API
+  description: Presigned file-upload lifecycle for local-file ingestion.
+  humanURL: https://docs.adaptionlabs.ai/
+  baseURL: https://api.prod.adaptionlabs.ai
+  tags:
+  - Upload
+  properties:
+  - type: OpenAPI
+    url: openapi/adaption-labs-upload-api-openapi.yml
+  - type: Documentation
+    url: https://docs.adaptionlabs.ai/
+  - type: APIReference
+    url: https://docs.adaptionlabs.ai/api
+  - type: GettingStarted
+    url: https://docs.adaptionlabs.ai/introduction/getting-started/index.md
+  - type: Authentication
+    url: authentication/adaption-labs-authentication.yml
+  - type: SDKs
+    url: packages/adaption-labs-packages.yml
+  - type: Conventions
+    url: conventions/adaption-labs-conventions.yml
+  - type: ErrorCatalog
+    url: errors/adaption-labs-problem-types.yml
+  - type: DataModel
+    url: data-model/adaption-labs-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,3 +104,56 @@ maintainers:
 common:
 - type: Website
   url: https://www.adaptionlabs.ai/
+- type: Documentation
+  url: https://docs.adaptionlabs.ai/
+- type: APIReference
+  url: https://docs.adaptionlabs.ai/api
+- type: GettingStarted
+  url: https://docs.adaptionlabs.ai/introduction/getting-started/index.md
+- type: Authentication
+  url: authentication/adaption-labs-authentication.yml
+- type: AgenticAccess
+  url: agentic-access/adaption-labs-agentic-access.yml
+- type: OpenAPI
+  url: openapi/adaption-labs-datasets-openapi.yml
+- type: MCPServer
+  url: mcp/adaption-labs-mcp.yml
+- type: ErrorCatalog
+  url: errors/adaption-labs-problem-types.yml
+- type: DataModel
+  url: data-model/adaption-labs-data-model.yml
+- type: Lifecycle
+  url: lifecycle/adaption-labs-lifecycle.yml
+- type: Conformance
+  url: conformance/adaption-labs-conformance.yml
+- type: Compliance
+  url: https://adaptionlabs.ai/enterprise
+- type: Packages
+  url: packages/adaption-labs-packages.yml
+- type: SDKs
+  url: packages/adaption-labs-packages.yml
+- type: Conventions
+  url: conventions/adaption-labs-conventions.yml
+- type: ChangeLog
+  url: changelog/adaption-labs-changelog.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/adaption-labs-llms.txt
+- type: Blog
+  url: https://adaptionlabs.ai/blog
+- type: Support
+  url: https://discord.gg/sHhG8kwVav
+- type: SignUp
+  url: https://adaptionlabs.ai/app/auth
+- type: TermsOfService
+  url: https://adaptionlabs.ai/terms-of-service
+- type: PrivacyPolicy
+  url: https://adaptionlabs.ai/privacy-policy
+- type: DomainSecurity
+  url: security/adaption-labs-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

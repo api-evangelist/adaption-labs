@@ -1,0 +1,16 @@
+{
+  "provider": "adaption-labs",
+  "sources": [
+    "adaption-labs-datasets-api-openapi.yml",
+    "adaption-labs-upload-api-openapi.yml"
+  ],
+  "outputs": [
+    "adaption-labs-datasets-api-openapi.yml",
+    "adaption-labs-upload-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

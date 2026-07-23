@@ -1,0 +1,67 @@
+generated: '2026-07-17'
+method: searched
+source: https://docs.adaptionlabs.ai/introduction/getting-started/index.md
+docs: https://docs.adaptionlabs.ai/
+api: Adaptive Data API
+base_url: https://api.prod.adaptionlabs.ai
+summary: >-
+  Cross-cutting runtime semantics for the Adaption (Adaptive Data) API, derived
+  from the developer docs and the official Python SDK. The API exposes one
+  lifecycle — ingest, adapt, evaluate, export — over dataset resources.
+auth:
+  style: bearer
+  header: Authorization
+  detail: HTTP Bearer API key (pt_live_ prefix). See authentication/adaption-labs-authentication.yml
+versioning:
+  style: uri-path
+  current: v1
+  detail: All endpoints are namespaced under /api/v1 (e.g. /api/v1/datasets).
+async_jobs:
+  model: poll
+  detail: >-
+    Ingestion (Hugging Face / Kaggle import) and adaptation runs execute
+    asynchronously server-side. Clients poll dataset status and block on
+    completion before the next lifecycle stage.
+  status_operation: GET /api/v1/datasets/{dataset_id}/status
+  sdk_helper: datasets.wait_for_completion()
+uploads:
+  style: presigned
+  detail: >-
+    Large file ingestion uses a two-step presigned upload — initiate returns a
+    presigned URL, the client PUTs the file, then completes the upload.
+  operations:
+  - POST /api/v1/datasets/upload/initiate
+  - POST /api/v1/datasets/upload/complete
+  supported_formats: [csv, json, jsonl, parquet]
+media_type:
+  request: application/json
+  response: application/json
+idempotency:
+  supported: false
+  detail: No idempotency-key header is documented for the Adaptive Data API as of this pass.
+pagination:
+  style: cursor
+  detail: >-
+    listDatasets (GET /api/v1/datasets) uses cursor pagination. Pass cursor
+    (from the previous response next_cursor) and limit (max 100, default 20);
+    the response carries next_cursor (null when no more results). Also supports
+    filtering (created_after, created_before, q, status) and sort/sort_direction.
+  request_params: [cursor, limit]
+  response_fields: [next_cursor]
+error_envelope:
+  shape: 'object { code, level, message }'
+  detail: >-
+    Structured failures surface on error_data with a stable code (e.g. E0100),
+    a level (error|warning), and a message. See errors/adaption-labs-problem-types.yml.
+metering:
+  model: credits
+  detail: >-
+    Runs reserve and consume credits. runDataset with estimate=true returns
+    estimatedCreditsConsumed and estimatedMinutes without starting a run;
+    multimodal (image) rows bill at 10 credits per 100 output rows.
+rate_limits:
+  detail: No public rate-limit headers or quota policy documented; usage is metered in credits.
+cross_links:
+  authentication: authentication/adaption-labs-authentication.yml
+  packages: packages/adaption-labs-packages.yml
+  changelog: changelog/adaption-labs-changelog.yml

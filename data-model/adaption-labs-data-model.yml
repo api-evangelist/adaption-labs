@@ -1,0 +1,57 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/adaption-labs-datasets-openapi.yml
+docs: https://docs.adaptionlabs.ai/api
+entities:
+  - name: Dataset
+    description: >-
+      The central resource. Created via file upload, Hugging Face, or Kaggle
+      import; moves through pending -> running -> succeeded/failed as it is
+      ingested, adapted, and evaluated.
+    id_field: dataset_id
+    fields:
+      - dataset_id
+      - created_at
+      - status
+      - configured_column_mapping
+      - error_data
+  - name: ColumnMapping
+    description: >-
+      User-configured mapping of dataset columns to roles (prompt, completion,
+      chat, context, image). Embedded on Dataset as configured_column_mapping.
+    fields: [prompt, completion, chat, context, image]
+  - name: Run
+    description: >-
+      An augmentation/adaptation pipeline execution against a dataset. Started
+      by runDataset; estimate=true yields a cost quote without a run.
+    id_field: run_id
+    fields: [run_id, estimate, estimatedCreditsConsumed, estimatedMinutes, multimodalPricingApplied, creditMultiplier]
+  - name: Evaluation
+    description: Quality metrics computed for a dataset after adaptation.
+    fields: [grade_before, grade_after, improvement_percent, percentile_after, score_after]
+  - name: Upload
+    description: >-
+      Presigned file-upload lifecycle for local-file ingestion (initiate ->
+      client PUT to S3 -> complete). A subresource of Dataset.
+    fields: [file_format, name, upload_url, s3_key, file_size_bytes, sha256]
+relationships:
+  - from: ColumnMapping
+    to: Dataset
+    type: belongs_to
+    via: configured_column_mapping
+  - from: Run
+    to: Dataset
+    type: belongs_to
+    via: dataset_id (path)
+  - from: Evaluation
+    to: Dataset
+    type: belongs_to
+    via: dataset_id (path)
+  - from: Upload
+    to: Dataset
+    type: belongs_to
+    via: dataset_id (path)
+id_prefixes:
+  note: >-
+    Dataset identifiers are opaque strings (dataset_id); API keys use the
+    pt_live_ prefix. No further object id-prefix scheme is published.

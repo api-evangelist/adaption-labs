@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Adaption Adaptive Data API
+  version: 1.0.0
+extends: openapi/adaption-labs-datasets-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: true
+      x-apievangelist-source: https://docs.adaptionlabs.ai/api
+      x-apievangelist-notes: >-
+        Spec reconstructed from the public Stainless-generated API reference.
+        Auth is a Bearer API key (pt_live_ prefix). Pagination is cursor-based on
+        listDatasets. Runs and imports are asynchronous — poll getDatasetStatus.
+  - target: $.paths['/api/v1/datasets/{dataset_id}/run'].post
+    update:
+      x-apievangelist-metering: >-
+        Consumes credits; call with estimate=true to quote cost without a run.
+  - target: $.paths['/api/v1/datasets/{dataset_id}/publish'].post
+    update:
+      x-apievangelist-status: not-implemented
+      x-apievangelist-notes: Currently returns 501.

@@ -1,0 +1,163 @@
+openapi: 3.1.0
+info:
+  title: Adaption Adaptive Data Datasets Upload API
+  version: v1
+  description: REST API for Adaption's Adaptive Data platform — ingest a dataset (local file upload, Hugging Face, or Kaggle), run an augmentation/adaptation pipeline with brand and quality controls, evaluate quality, and export the processed rows. Reconstructed faithfully from the public Stainless-generated API reference at https://docs.adaptionlabs.ai/api. Field and operation names match the documented surface; this is a derived spec, not the provider's canonical OpenAPI.
+  contact:
+    name: Adaption Support
+    email: support@adaptionlabs.ai
+    url: https://docs.adaptionlabs.ai/resources/support/
+  x-provenance:
+    generated: '2026-07-17'
+    method: derived
+    source: https://docs.adaptionlabs.ai/api
+servers:
+- url: https://api.prod.adaptionlabs.ai
+  description: Production
+security:
+- bearerAuth: []
+tags:
+- name: Upload
+  description: Presigned file-upload lifecycle for local-file ingestion.
+paths:
+  /api/v1/datasets/upload/initiate:
+    post:
+      operationId: initiateUpload
+      summary: Initiate a dataset upload
+      tags:
+      - Upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - file_format
+              - name
+              properties:
+                file_format:
+                  type: string
+                  enum:
+                  - csv
+                  - json
+                  - jsonl
+                  - parquet
+                  description: Format of the file being uploaded.
+                name:
+                  type: string
+                  description: Human-readable name for the dataset.
+      responses:
+        '200':
+          description: Presigned upload URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  upload_url:
+                    type: string
+                    description: Pre-signed S3 URL — upload the file directly to this URL via HTTP PUT.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/datasets/upload/complete:
+    post:
+      operationId: completeUpload
+      summary: Complete a dataset upload and trigger processing
+      tags:
+      - Upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - file_format
+              properties:
+                file_format:
+                  type: string
+                  enum:
+                  - csv
+                  - json
+                  - jsonl
+                  - parquet
+                  description: Format of the uploaded file.
+      responses:
+        '200':
+          description: Upload completed, processing triggered
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/datasets/{dataset_id}/upload/complete:
+    post:
+      operationId: completeUploadById
+      summary: Complete a file upload and trigger processing
+      description: File uploads only. Call after uploading bytes to the presigned URL from POST /datasets. Verifies the file exists in S3, then triggers the preprocessing pipeline.
+      tags:
+      - Upload
+      parameters:
+      - $ref: '#/components/parameters/DatasetId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - file_size_bytes
+              properties:
+                file_size_bytes:
+                  type: integer
+                  description: Size of the uploaded file in bytes (for verification).
+                sha256:
+                  type: string
+                  description: SHA-256 hex digest of the uploaded file (for integrity verification).
+      responses:
+        '200':
+          description: Upload completed, processing triggered
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+components:
+  parameters:
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Unique dataset identifier.
+  responses:
+    UnprocessableEntity:
+      description: Request could not be processed (e.g. no run has started on the dataset)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      description: Error envelope carrying a stable code, severity, and message.
+      properties:
+        code:
+          type: string
+          description: Stable error code (e.g. E0100).
+        level:
+          type: string
+          enum:
+          - error
+          - warning
+        message:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API key issued in the Adaption app (Settings → API keys). Format pt_live_... . Send as `Authorization: Bearer <key>` or set the ADAPTION_API_KEY environment variable for the SDK.'

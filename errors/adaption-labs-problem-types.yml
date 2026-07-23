@@ -1,0 +1,41 @@
+generated: '2026-07-17'
+method: derived
+source: openapi/adaption-labs-datasets-openapi.yml
+format: adaption-error-envelope
+envelope:
+  shape: 'object { code, level, message }'
+  fields:
+    code: Stable error code (e.g. E0100) when the failure is structured.
+    level: Severity — error or warning.
+    message: Human-readable error message.
+  surfaced_on: error_data (Dataset, DatasetStatus)
+problems:
+  - status: 401
+    title: Unauthorized
+    detail: Missing or invalid API key.
+    source_operation: openapi/adaption-labs-datasets-openapi.yml#createDataset
+  - status: 404
+    title: Not found
+    detail: The requested dataset does not exist.
+    source_operation: openapi/adaption-labs-datasets-openapi.yml#getDataset
+  - status: 422
+    title: Unprocessable entity
+    detail: >-
+      Request could not be processed — e.g. downloadDataset called before any
+      run has started on the dataset, or invalid column mapping / recipe on
+      runDataset.
+    source_operation: openapi/adaption-labs-datasets-openapi.yml#downloadDataset
+  - status: 501
+    title: Not implemented
+    detail: publishDataset currently returns 501 — publishing to Hugging Face / Kaggle is not yet implemented.
+    source_operation: openapi/adaption-labs-datasets-openapi.yml#publishDataset
+error_codes:
+  scheme: 'E#### (e.g. E0100)'
+  note: >-
+    Structured failures carry a stable code in error_data.code. The public docs
+    reference E0100 as an example; the full registry is not published. Codes are
+    accompanied by level (error|warning) and a message.
+  known:
+    - code: E0100
+      level: error
+      note: Example structured failure code cited in the API reference (get_status).
