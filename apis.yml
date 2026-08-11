@@ -102,6 +102,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/adaption-labs-datasets-overlay.yaml
 - type: Website
   url: https://www.adaptionlabs.ai/
 - type: Documentation
@@ -115,7 +117,7 @@ common:
 - type: AgenticAccess
   url: agentic-access/adaption-labs-agentic-access.yml
 - type: OpenAPI
-  url: openapi/adaption-labs-datasets-openapi.yml
+  url: openapi/_original/adaption-labs-datasets-openapi.yml
 - type: MCPServer
   url: mcp/adaption-labs-mcp.yml
 - type: ErrorCatalog
