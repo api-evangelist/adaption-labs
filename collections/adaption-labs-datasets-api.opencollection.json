@@ -1,0 +1,228 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Adaption Adaptive Data Datasets API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List datasets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets",
+            "params": [
+              {
+                "name": "created_after",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 datetime — datasets created after this time."
+              },
+              {
+                "name": "created_before",
+                "value": "",
+                "type": "query",
+                "description": "ISO 8601 datetime — datasets created before this time."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from the previous response next_cursor field."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results (max 100"
+              },
+              {
+                "name": "q",
+                "value": "",
+                "type": "query",
+                "description": "Search by dataset name (case-insensitive contains)."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort field."
+              },
+              {
+                "name": "sort_direction",
+                "value": "",
+                "type": "query",
+                "description": "Sort direction."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by status."
+              }
+            ]
+          },
+          "docs": "List datasets with cursor pagination, filtering, and search."
+        },
+        {
+          "info": {
+            "name": "Create a dataset from file upload, HuggingFace, or Kaggle",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Unified ingest endpoint. Discriminated by source.type: \"file\" returns upload instructions for a presigned S3 PUT, \"huggingface\" and \"kaggle\" start an async import."
+        },
+        {
+          "info": {
+            "name": "Get a dataset by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/:dataset_id",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier."
+              }
+            ]
+          },
+          "docs": "Get a dataset by ID"
+        },
+        {
+          "info": {
+            "name": "Get the processing status of a dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/:dataset_id/status",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier."
+              }
+            ]
+          },
+          "docs": "Get the processing status of a dataset"
+        },
+        {
+          "info": {
+            "name": "Get evaluation results for a dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/:dataset_id/evaluation",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier."
+              }
+            ]
+          },
+          "docs": "Get evaluation results for a dataset"
+        },
+        {
+          "info": {
+            "name": "Start an augmentation run (or estimate cost)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/:dataset_id/run",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates column mapping and recipe configuration, reserves credits, and starts the augmentation pipeline. Set estimate=true to validate and get a cost quote without starting a run."
+        },
+        {
+          "info": {
+            "name": "Download the processed dataset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/:dataset_id/download",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier."
+              },
+              {
+                "name": "fileFormat",
+                "value": "",
+                "type": "query",
+                "description": "Output file format. Defaults to the original upload format if omitted."
+              }
+            ]
+          },
+          "docs": "Streams the processed rows in the requested file format. Works on datasets with status ready (full output) and on failed datasets (partial output). Returns 422 only when no run has ever started on this dataset."
+        },
+        {
+          "info": {
+            "name": "Publish a dataset to an external platform",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/:dataset_id/publish",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Publishes the processed dataset to Hugging Face or Kaggle. Currently returns 501 — not yet implemented."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

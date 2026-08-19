@@ -1,0 +1,77 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Adaption Adaptive Data Datasets Upload API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Upload",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Initiate a dataset upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/upload/initiate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate a dataset upload"
+        },
+        {
+          "info": {
+            "name": "Complete a dataset upload and trigger processing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/upload/complete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Complete a dataset upload and trigger processing"
+        },
+        {
+          "info": {
+            "name": "Complete a file upload and trigger processing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.prod.adaptionlabs.ai/api/v1/datasets/:dataset_id/upload/complete",
+            "params": [
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique dataset identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "File uploads only. Call after uploading bytes to the presigned URL from POST /datasets. Verifies the file exists in S3, then triggers the preprocessing pipeline."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
