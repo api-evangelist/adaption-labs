@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Adaption Adaptive Data Datasets API
   version: v1
@@ -304,6 +304,47 @@ paths:
           $ref: '#/components/responses/NotImplemented'
 components:
   schemas:
+    RunResponse:
+      type: object
+      properties:
+        estimate:
+          type: boolean
+          description: Whether this was an estimate-only request.
+        estimatedCreditsConsumed:
+          type: number
+          description: Estimated number of credits consumed by this run.
+        estimatedMinutes:
+          type: number
+          description: Estimated processing time in minutes.
+        multimodalPricingApplied:
+          type: boolean
+          description: True when an image column is mapped and also listed in context_columns.
+        creditMultiplier:
+          type: number
+          description: 10 credits per 100 output rows when multimodalPricingApplied is true.
+        run_id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for this pipeline run. Null for estimate-only requests.
+    HuggingfaceSource:
+      type: object
+      required:
+      - type
+      - url
+      - files
+      properties:
+        type:
+          type: string
+          enum:
+          - huggingface
+        url:
+          type: string
+          description: Hugging Face dataset URL.
+        files:
+          type: array
+          items:
+            type: string
     FileSource:
       type: object
       required:
@@ -326,31 +367,22 @@ components:
         name:
           type: string
           description: Human-readable name for the dataset.
-    DatasetEvaluation:
+    ErrorData:
       type: object
+      description: Error details if the dataset failed. Null otherwise.
       properties:
-        dataset_id:
+        code:
           type: string
-          description: Dataset ID.
-        quality:
-          type: object
-          description: Structured quality metrics. Null until evaluation completes.
-          properties:
-            grade_before:
-              type: string
-              description: Letter grade (A-E) before augmentation.
-            grade_after:
-              type: string
-              description: Letter grade (A-E) after augmentation.
-            improvement_percent:
-              type: number
-              description: Relative quality improvement as a percentage.
-            percentile_after:
-              type: number
-              description: Percentile rank (0-100) after augmentation.
-            score_after:
-              type: number
-              description: Quality score (0-10) after augmentation.
+          description: Stable error code when the failure was structured (e.g. E0100).
+        level:
+          type: string
+          enum:
+          - error
+          - warning
+          description: Severity when known.
+        message:
+          type: string
+          description: Error message.
     RunRequest:
       type: object
       properties:
@@ -389,31 +421,6 @@ components:
           type: object
           additionalProperties: true
           description: Recipe configuration (e.g. reasoning_traces).
-    Error:
-      type: object
-      description: Error envelope carrying a stable code, severity, and message.
-      properties:
-        code:
-          type: string
-          description: Stable error code (e.g. E0100).
-        level:
-          type: string
-          enum:
-          - error
-          - warning
-        message:
-          type: string
-    CreateDatasetRequest:
-      type: object
-      required:
-      - source
-      properties:
-        source:
-          description: 'Dataset source configuration. Discriminated by type: file, huggingface, or kaggle.'
-          oneOf:
-          - $ref: '#/components/schemas/FileSource'
-          - $ref: '#/components/schemas/HuggingfaceSource'
-          - $ref: '#/components/schemas/KaggleSource'
     DatasetStatus:
       type: object
       properties:
@@ -432,6 +439,31 @@ components:
               type: integer
             total_rows:
               type: integer
+    CreateDatasetRequest:
+      type: object
+      required:
+      - source
+      properties:
+        source:
+          description: 'Dataset source configuration. Discriminated by type: file, huggingface, or kaggle.'
+          oneOf:
+          - $ref: '#/components/schemas/FileSource'
+          - $ref: '#/components/schemas/HuggingfaceSource'
+          - $ref: '#/components/schemas/KaggleSource'
+    Error:
+      type: object
+      description: Error envelope carrying a stable code, severity, and message.
+      properties:
+        code:
+          type: string
+          description: Stable error code (e.g. E0100).
+        level:
+          type: string
+          enum:
+          - error
+          - warning
+        message:
+          type: string
     KaggleSource:
       type: object
       required:
@@ -450,56 +482,6 @@ components:
           type: array
           items:
             type: string
-    HuggingfaceSource:
-      type: object
-      required:
-      - type
-      - url
-      - files
-      properties:
-        type:
-          type: string
-          enum:
-          - huggingface
-        url:
-          type: string
-          description: Hugging Face dataset URL.
-        files:
-          type: array
-          items:
-            type: string
-    ColumnMapping:
-      type: object
-      description: User-configured column mapping. Null if not yet configured.
-      properties:
-        chat:
-          type: string
-        completion:
-          type: string
-        context:
-          type: array
-          items:
-            type: string
-        image:
-          type: string
-        prompt:
-          type: string
-    ErrorData:
-      type: object
-      description: Error details if the dataset failed. Null otherwise.
-      properties:
-        code:
-          type: string
-          description: Stable error code when the failure was structured (e.g. E0100).
-        level:
-          type: string
-          enum:
-          - error
-          - warning
-          description: Severity when known.
-        message:
-          type: string
-          description: Error message.
     CreateDatasetResponse:
       type: object
       properties:
@@ -522,6 +504,47 @@ components:
             url:
               type: string
               description: Pre-signed URL for uploading the file.
+    DatasetEvaluation:
+      type: object
+      properties:
+        dataset_id:
+          type: string
+          description: Dataset ID.
+        quality:
+          type: object
+          description: Structured quality metrics. Null until evaluation completes.
+          properties:
+            grade_before:
+              type: string
+              description: Letter grade (A-E) before augmentation.
+            grade_after:
+              type: string
+              description: Letter grade (A-E) after augmentation.
+            improvement_percent:
+              type: number
+              description: Relative quality improvement as a percentage.
+            percentile_after:
+              type: number
+              description: Percentile rank (0-100) after augmentation.
+            score_after:
+              type: number
+              description: Quality score (0-10) after augmentation.
+    ColumnMapping:
+      type: object
+      description: User-configured column mapping. Null if not yet configured.
+      properties:
+        chat:
+          type: string
+        completion:
+          type: string
+        context:
+          type: array
+          items:
+            type: string
+        image:
+          type: string
+        prompt:
+          type: string
     Dataset:
       type: object
       properties:
@@ -544,32 +567,9 @@ components:
           $ref: '#/components/schemas/ColumnMapping'
         error_data:
           $ref: '#/components/schemas/ErrorData'
-    RunResponse:
-      type: object
-      properties:
-        estimate:
-          type: boolean
-          description: Whether this was an estimate-only request.
-        estimatedCreditsConsumed:
-          type: number
-          description: Estimated number of credits consumed by this run.
-        estimatedMinutes:
-          type: number
-          description: Estimated processing time in minutes.
-        multimodalPricingApplied:
-          type: boolean
-          description: True when an image column is mapped and also listed in context_columns.
-        creditMultiplier:
-          type: number
-          description: 10 credits per 100 output rows when multimodalPricingApplied is true.
-        run_id:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier for this pipeline run. Null for estimate-only requests.
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
+    NotImplemented:
+      description: Endpoint not yet implemented
       content:
         application/json:
           schema:
@@ -580,14 +580,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotImplemented:
-      description: Endpoint not yet implemented
+    UnprocessableEntity:
+      description: Request could not be processed (e.g. no run has started on the dataset)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    UnprocessableEntity:
-      description: Request could not be processed (e.g. no run has started on the dataset)
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:
